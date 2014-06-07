@@ -1,0 +1,47 @@
+name:     Buckets
+version:  v1
+formats:
+  in:   [json, xml]
+  out:  [json, xml]
+api:
+- resource: buckets
+  authorize: |
+    ...
+  contains:
+  - desc: Create a bucket
+    post:
+    code: Bucket.create
+  - resource: :id
+    contains:
+    - desc: Read a bucket
+      get:
+      code: |
+        authorize! :read
+        Bucket[params[:id]]
+    - desc: Update a bucket
+      put:
+    - desc: Delete a bucket
+      delete:
+      code: |
+        authorize! :delete
+        Buckets.where(id: params[id]).delete
+    - resource: objects
+      authorize: |
+        ...
+      contains:
+      - post:
+      - resource: :id
+        contains:
+        - get:
+        - put:
+        - delete:
+- resource: users
+  authorize: |
+    ...
+  contains:
+  - post:
+  - resource: :id
+    contains:
+    - get:
+    - put:
+    - delete:
