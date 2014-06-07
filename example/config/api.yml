@@ -5,43 +5,52 @@ formats:
   out:  [json, xml]
 api:
 - resource: buckets
-  authorize: |
-    ...
   contains:
+  - desc: List buckets
+    get:
+    code: Bucket.all
   - desc: Create a bucket
     post:
     code: Bucket.create
-  - resource: :id
+  - resource: :bucket_id
     contains:
     - desc: Read a bucket
       get:
       code: |
-        authorize! :read
-        Bucket[params[:id]]
+        Bucket[params[:bucket_id]]
     - desc: Update a bucket
       put:
+      code: |
+        Bucket[params[:bucket_id]].set(...)
     - desc: Delete a bucket
       delete:
       code: |
-        authorize! :delete
-        Buckets.where(id: params[id]).delete
+        Bucket.where(id: params[bucket_id]).delete
     - resource: objects
-      authorize: |
-        ...
       contains:
+      - get:
+        code:
       - post:
-      - resource: :id
+        code:
+      - resource: :object_id
         contains:
         - get:
+          code:
         - put:
+          code:
         - delete:
+          code:
 - resource: users
-  authorize: |
-    ...
   contains:
+  - get:
+    code:
   - post:
-  - resource: :id
+    code:
+  - resource: :user_id
     contains:
     - get:
+      code:
     - put:
+      code:
     - delete:
+      code:
