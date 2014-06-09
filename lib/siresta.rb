@@ -1,7 +1,4 @@
-module Siresta
-  def self.api
-  end
-
-  def self.client
-  end
-end
+require 'siresta/api'
+require 'siresta/client'
+require 'siresta/env'
+require 'siresta/routes'

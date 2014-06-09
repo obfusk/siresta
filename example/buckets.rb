@@ -8,7 +8,7 @@ module Buckets
     return @db if @db
 
     @db = Sequel.connect \
-      YAML.load(File.read('config/database.yml'))['development']
+      YAML.load(File.read('config/database.yml'))[Siresta.env]
 
     require './models/bucket'
     require './models/object'

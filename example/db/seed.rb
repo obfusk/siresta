@@ -1,7 +1,4 @@
-require './buckets'
-
-db = Buckets.connect
-db.transaction do
+Buckets.connect.transaction do
   Buckets::User.create name: 'admin', is_admin: true
   %w{ bob chris dave }.each do |name|
     Buckets::User.create name: name

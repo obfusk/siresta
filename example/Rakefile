@@ -1,29 +1,42 @@
+require 'siresta'
+
+env = Siresta.env
+
+desc 'environment'
+task :environment do
+  require './buckets'
+  Buckets.connect
+end
+
+desc 'pry console'
+task :console => :environment do
+  require 'pry'
+  binding.pry
+end
+
 namespace :db do
   desc 'database console'
   task :console do
-    sh 'sequel -e development config/database.yml'
+    sh "sequel -e #{env} config/database.yml"
   end
 
   desc 'drop database'
   task :drop do
-    sh 'rm db/development.sqlite3'
+    sh "rm -f db/#{env}.sqlite3"
   end
 
   desc 'migrate database'
   task :migrate do
-    sh 'sequel -e development -m db/migrations config/database.yml'
+    sh "sequel -e #{env} -m db/migrations config/database.yml"
   end
 
   desc 'seed database'
-  task :seed do
+  task :seed => :environment do
     require './db/seed'
   end
 end
 
-desc 'pry console'
-task :console do
-  require 'pry'
-  require './buckets'
-  Buckets.connect
-  binding.pry
+desc 'API routes'
+task :routes => :environment do
+  puts Siresta.routes.to_yaml
 end
