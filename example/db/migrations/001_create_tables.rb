@@ -13,6 +13,7 @@ Sequel.migration do
     create_table(:users) do
       primary_key :id
       String :name, unique: true, null: false
+      Boolean :is_admin, default: false
     end
 
     create_join_table(

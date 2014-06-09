@@ -1,10 +1,10 @@
 name:     Buckets
 version:  v1
-formats:
-  in:   [json, xml]
-  out:  [json, xml]
 api:
 - resource: buckets
+  formats:
+    in:   [json, xml]
+    out:  [json, xml]
   contains:
   - desc: List buckets
     get:

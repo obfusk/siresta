@@ -1,9 +1,4 @@
 namespace :db do
-  desc 'migrate database'
-  task :migrate do
-    sh 'sequel -e development -m db/migrations config/database.yml'
-  end
-
   desc 'database console'
   task :console do
     sh 'sequel -e development config/database.yml'
@@ -13,4 +8,22 @@ namespace :db do
   task :drop do
     sh 'rm db/development.sqlite3'
   end
+
+  desc 'migrate database'
+  task :migrate do
+    sh 'sequel -e development -m db/migrations config/database.yml'
+  end
+
+  desc 'seed database'
+  task :seed do
+    require './db/seed'
+  end
+end
+
+desc 'pry console'
+task :console do
+  require 'pry'
+  require './buckets'
+  Buckets.connect
+  binding.pry
 end
