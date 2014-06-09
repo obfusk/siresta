@@ -4,15 +4,17 @@ require 'yaml'
 
 module Buckets
 
-  def self.bootstrap
-    db = Sequel.connect \
+  def self.connect
+    return @db if @db
+
+    @db = Sequel.connect \
       YAML.load(File.read('config/database.yml'))['development']
 
     require './models/bucket'
     require './models/object'
     require './models/user'
 
-    db
+    @db
   end
 
   API     = Siresta.api

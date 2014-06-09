@@ -1,0 +1,16 @@
+namespace :db do
+  desc 'migrate database'
+  task :migrate do
+    sh 'sequel -e development -m db/migrations config/database.yml'
+  end
+
+  desc 'database console'
+  task :console do
+    sh 'sequel -e development config/database.yml'
+  end
+
+  desc 'drop database'
+  task :drop do
+    sh 'rm db/development.sqlite3'
+  end
+end

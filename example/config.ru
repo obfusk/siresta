@@ -1,4 +1,4 @@
 require 'bundler/setup'
 require './buckets'
-Buckets.bootstrap
+Buckets.connect
 run Buckets::API
