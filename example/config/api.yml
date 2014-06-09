@@ -7,50 +7,35 @@ api:
     out:  [json, xml]
   contains:
   - desc: List buckets
-    get:
-    code: Bucket.all
+    get: Bucket.all
   - desc: Create a bucket
-    post:
-    code: Bucket.create
+    post: Bucket.create
   - resource: :bucket_id
     contains:
     - desc: Read a bucket
-      get:
-      code: |
+      get: |
         Bucket[params[:bucket_id]]
     - desc: Update a bucket
-      put:
-      code: |
+      put: |
         Bucket[params[:bucket_id]].set(...)
     - desc: Delete a bucket
-      delete:
-      code: |
+      delete: |
         Bucket.where(id: params[bucket_id]).delete
     - resource: objects
       contains:
       - get:
-        code:
       - post:
-        code:
       - resource: :object_id
         contains:
         - get:
-          code:
         - put:
-          code:
         - delete:
-          code:
 - resource: users
   contains:
   - get:
-    code:
   - post:
-    code:
   - resource: :user_id
     contains:
     - get:
-      code:
     - put:
-      code:
     - delete:
-      code:

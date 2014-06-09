@@ -22,8 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'excon'
   s.add_runtime_dependency 'hashie'
-  s.add_runtime_dependency 'multi_json'
-  s.add_runtime_dependency 'multi_xml'
+  s.add_runtime_dependency 'ox'
   s.add_runtime_dependency 'sinatra'
 
 # s.add_development_dependency 'rake'
