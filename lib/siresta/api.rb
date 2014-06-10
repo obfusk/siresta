@@ -27,7 +27,7 @@ module Siresta
             class_eval %Q{
               #{m} #{path} do
                 handle_request(#{m.to_sym.inspect}, #{path}) do
-                  #{info[:codes][m] || 'raise :TODO'}
+                  #{info[:specs][m][m] || 'raise :TODO'}
                 end
               end
             }

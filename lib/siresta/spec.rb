@@ -14,11 +14,11 @@ module Siresta
     end
 
     def self.walk_resource(specs, path, opts)
-      methods, codes = specs.inject([[],{}]) do |(ms,cs), spec|
+      ms, ss = specs.inject([[],{}]) do |(ms,ss), spec|
         (m = (METHODS & spec.keys).first) ?
-          [ms + [m], cs.merge(m => spec[m])] : [ms,cs]
+          [ms + [m], ss.merge(m => spec)] : [ms,ss]
       end
-      opts[:resource][{ methods: methods, codes: codes, path: path }] \
+      opts[:resource][{ methods: ms, specs: ss, path: path }] \
         .tap { |res| walk_subresources res, specs, path, opts }
     end
 

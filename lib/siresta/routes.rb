@@ -5,7 +5,9 @@ module Siresta
     routes = []
     Spec.walk api_spec(file), {
       resource: -> (info) {
-        info[:methods].each { |m| routes << [m.upcase, info[:path]] }
+        info[:methods].each do |m|
+          routes << [m.upcase, info[:path], info[:specs][m]['desc']]
+        end
         nil
       },
       root: -> (_) {}, subresource: -> (_) {},
