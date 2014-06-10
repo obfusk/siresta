@@ -7,9 +7,11 @@ api:
     out:  [json, xml]
   contains:
   - desc: List buckets
-    get: Bucket.all
+    get: |
+      Bucket.all
   - desc: Create a bucket
-    post: Bucket.create
+    post: |
+      Bucket.create
   - resource: :bucket_id
     contains:
     - desc: Read a bucket
@@ -17,7 +19,7 @@ api:
         Bucket[params[:bucket_id]]
     - desc: Update a bucket
       put: |
-        Bucket[params[:bucket_id]].set(...)
+        Bucket[params[:bucket_id]].set('TODO')
     - desc: Delete a bucket
       delete: |
         Bucket.where(id: params[bucket_id]).delete
@@ -39,3 +41,5 @@ api:
     - get:
     - put:
     - delete:
+
+# TODO: params, formats, auth
