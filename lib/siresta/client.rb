@@ -30,16 +30,12 @@ module Siresta
       },
       subresource: -> (res, sub, r) {
         res.class_eval do
-          define_method(r.to_sym) do
-            sub.new url, r
-          end
+          define_method(r.to_sym) { sub.new url, r }
         end
       },
       parametrized_subresource: -> (res, sub, r) {
         res.class_eval do
-          define_method(:[]) do |param|
-            sub.new url, param
-          end
+          define_method(:[]) { |param| sub.new url, param }
         end
       },
     }

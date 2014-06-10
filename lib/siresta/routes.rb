@@ -32,9 +32,7 @@ module Siresta
     routes = []
     _walk_spec api_spec(file), {
       resource: -> (methods, path) {
-        methods.each do |m|
-          routes << [m.upcase, path]
-        end
+        methods.each { |m| routes << [m.upcase, path] }
       },
       client: -> (res, name, version) {},
       subresource: -> (res, sub, r) {},
