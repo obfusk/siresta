@@ -3,7 +3,6 @@ PATH
   specs:
     siresta (0.0.1)
       excon
-      hashie
       ox
       sinatra
 
@@ -11,8 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     coderay (1.1.0)
-    excon (0.36.0)
-    hashie (3.0.0)
+    excon (0.37.0)
     method_source (0.8.2)
     ox (2.1.1)
     pry (0.10.0)

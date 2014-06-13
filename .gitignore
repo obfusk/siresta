@@ -1,1 +1,8 @@
+*~
+*.swp
+
+/*.gem
+/.yardoc
+/doc
+
 /example/db/*.sqlite3

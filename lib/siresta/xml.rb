@@ -1,7 +1,26 @@
+# --                                                            ; {{{1
+#
+# File        : siresta/xml.rb
+# Maintainer  : Felix C. Stegerman <flx@obfusk.net>
+# Date        : 2014-06-13
+#
+# Copyright   : Copyright (C) 2014  Felix C. Stegerman
+# Licence     : LGPLv3+
+#
+# --                                                            ; }}}1
+
 require 'ox'
 
 module Siresta
   module XML
+    # parse XML
+    #
+    # ```
+    # Siresta::XML.parse '<foo><bar id="99">hi!</bar></foo>'
+    # # =>  { tag: 'foo', attrs: {}, contents: [
+    #         { tag: 'bar', attrs: { id: 99 }, contents: ['hi!'] }
+    #       ] }
+    # ```
     def self.parse(xml)
       ox_elem = Ox.parse xml
       _parse Ox::Document === ox_elem ? ox_elem.root : ox_elem
@@ -16,6 +35,19 @@ module Siresta
       end
     end
 
+    # emit XML
+    #
+    # ```
+    # puts Siresta::XML.emit(
+    #   { tag: 'foo', attrs: {}, contents: [
+    #     { tag: 'bar', attrs: { id: 99 }, contents: ['hi!'] }
+    #   ] }
+    # )
+    # # <?xml version="1.0"?>
+    # # <foo>
+    # #   <bar id="99">hi!</bar>
+    # # </foo>
+    # ```
     def self.emit(elem, opts = {})
       ox_doc = Ox::Document.new version: '1.0'
       _emit ox_doc, elem
@@ -34,3 +66,5 @@ module Siresta
     end
   end
 end
+
+# vim: set tw=70 sw=2 sts=2 et fdm=marker :

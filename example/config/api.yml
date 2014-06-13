@@ -2,27 +2,24 @@ name:     Buckets
 version:  v1
 api:
 - resource: buckets
-  formats:
-    in:   [json, xml]
-    out:  [json, xml]
   contains:
   - desc: List buckets
-    get: |
-      Bucket.all
+    get:
+    # Bucket.all
   - desc: Create a bucket
-    post: |
-      Bucket.create
+    post:
+    # Bucket.create
   - resource: :bucket_id
     contains:
     - desc: Read a bucket
-      get: |
-        Bucket[params[:bucket_id]]
+      get:
+      # Bucket[params[:bucket_id]]
     - desc: Update a bucket
-      put: |
-        Bucket[params[:bucket_id]].set('TODO')
+      put:
+      # Bucket[params[:bucket_id]].set('TODO')
     - desc: Delete a bucket
-      delete: |
-        Bucket.where(id: params[bucket_id]).delete
+      delete:
+      # Bucket.where(id: params[bucket_id]).delete
     - resource: objects
       contains:
       - get:
@@ -41,5 +38,3 @@ api:
     - get:
     - put:
     - delete:
-
-# TODO: params, formats, auth

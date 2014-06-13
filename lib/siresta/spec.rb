@@ -1,3 +1,14 @@
+# --                                                            ; {{{1
+#
+# File        : siresta/spec.rb
+# Maintainer  : Felix C. Stegerman <flx@obfusk.net>
+# Date        : 2014-06-13
+#
+# Copyright   : Copyright (C) 2014  Felix C. Stegerman
+# Licence     : LGPLv3+
+#
+# --                                                            ; }}}1
+
 require 'yaml'
 
 module Siresta
@@ -6,6 +17,7 @@ module Siresta
   module Spec
     METHODS = %w{ post get put delete }
 
+    # walk spec
     def self.walk(spec, opts)
       name    = spec['name']
       version = spec['version']
@@ -13,6 +25,7 @@ module Siresta
       opts[:root][{ res: res, name: name, version: version }]
     end
 
+    # process resource when walking spec
     def self.walk_resource(specs, path, opts)
       ms, ss = specs.inject([[],{}]) do |(ms,ss), spec|
         (m = (METHODS & spec.keys).first) ?
@@ -22,6 +35,7 @@ module Siresta
         .tap { |res| walk_subresources res, specs, path, opts }
     end
 
+    # process subresources when walking spec
     def self.walk_subresources(res, specs, path, opts)
       specs.each do |spec|
         if (r = spec['resource'])
@@ -36,9 +50,18 @@ module Siresta
     end
   end
 
-  def self.api_spec(file = DEFAULT_API_YAML, cache = true)
-    f = -> { YAML.load File.read(file) }
-    @api_spec ||= {}
-    cache ? @api_spec[file] ||= f[] : @api_spec[file] = f[]
+  # get (cached) API spec
+  # @param [Hash] opts            options
+  # @option opts [String] :data   YAML data, or:
+  # @option opts [String] :file   file name
+  def self.api_spec(opts = {})
+    if opts[:data]
+      YAML.load opts[:data]
+    else
+      file = opts[:file] || DEFAULT_API_YAML
+      (@api_spec ||= {})[file] ||= api_spec data: File.read(file)
+    end
   end
 end
+
+# vim: set tw=70 sw=2 sts=2 et fdm=marker :

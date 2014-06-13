@@ -1,5 +1,6 @@
 module Siresta
+  # environment
   def self.env
-    ENV['RAILS_ENV'] || ENV['RACK_ENV'] || 'development'
+    ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
   end
 end
