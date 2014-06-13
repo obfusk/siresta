@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'pry'
+gem 'puma'
 gem 'rake'
 gem 'sequel'
 gem 'siresta', path: '..'

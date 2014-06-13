@@ -18,7 +18,7 @@ module Siresta
     # this helper handles requests for generated routes
     def handle_request(method, path, &b)
       puts "handle_request(#{method}, #{path}) ..."
-      'TODO'                                                    # TODO
+      b[]                                                       # TODO
     end
   end
 
@@ -40,9 +40,10 @@ module Siresta
       resource: -> (info) {
         api.class_eval do
           info[:methods].each do |m|
+            what  = "#{m.upcase} #{info[:path]}".inspect
             path  = info[:path].inspect
             code  = info[:specs][m][m] ||
-                      "raise NotImplementedError, #{path}"
+                      "raise NotImplementedError, #{what}"
             class_eval %Q{
               #{m} #{path} do
                 handle_request(#{m.to_sym.inspect}, #{path}) do
