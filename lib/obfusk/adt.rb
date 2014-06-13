@@ -25,13 +25,13 @@ module Obfusk
         ctor  = Class.new self
         ctor.class_eval do
           attr_accessor :cls, :ctor, :ctor_name
-          define_method(:initialize) do |cls, ctor, *values|
+          define_method(:initialize) do |cls, ctor, *values, &f|
             if !b && (k = keys_.length) != (v = values.length)
               raise ArgumentError, "wrong number of arguments (#{v} for #{k})"
             end
             data  = Hash[keys_.zip values]
             @cls  = cls; @ctor = ctor; @ctor_name = name_
-            @data = b ? b[data] : data
+            @data = b ? b[data, f] : data
           end
           keys_.each { |k| define_method(k) { @data[k] } }
         end
@@ -41,8 +41,8 @@ module Obfusk
                               superclass.constructors.dup : {}
           end
           @constructors[name_] = ctor
-          define_singleton_method(name_) do |*values|
-            ctor.new self_, ctor, *values
+          define_singleton_method(name_) do |*values,&b|
+            ctor.new self_, ctor, *values, &b
           end
           const_set name_, ctor
         end
@@ -59,11 +59,6 @@ module Obfusk
         end
         m.match opts
       end
-
-      # TODO
-      def inherited(subclass)
-        puts "New subclass: #{subclass}"
-      end
     end
 
     def match(opts)
@@ -72,6 +67,15 @@ module Obfusk
           "constructors do not match (#{ok} for #{ck})"
       end
       opts[ctor_name][self]
+    end
+
+    def to_s
+      ctor_name = ctor.name.gsub(/^.*::/,'')
+      "#<#{cls.name}.#{ctor_name}: #{@data}>"
+    end
+
+    def inspect
+      to_s
     end
   end
 end

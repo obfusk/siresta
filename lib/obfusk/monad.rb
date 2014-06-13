@@ -19,6 +19,8 @@ module Obfusk
 
     module ClassMethods
       # inject a value into the monadic type
+      #
+      # implement me!
       def mreturn(x)
         raise NotImplementedError
       end
@@ -36,15 +38,28 @@ module Obfusk
         b ? bind_pass(m, &b) : bind_discard(m, k)
       end
 
+      # sequentially compose two actions, passing any value produced
+      # by the first as an argument to the second
+      #
+      # implement me!
       def bind_pass(m, &b)
         raise NotImplementedError
       end
 
+      # sequentially compose two actions, discarding any value
+      # produced by the first
+      #
+      # implement me!
       def bind_discard(m, k)
         bind_pass(m) { |_| k }
       end
 
-      # map monad
+      # TODO
+      # def fail
+      #   raise NotImplementedError
+      # end
+
+      # map monad (i.e. functor)
       def fmap(m, f = nil, &b)
         g = f || b; bind(m) { |k| mreturn g[k] }
       end
@@ -52,6 +67,25 @@ module Obfusk
       # flatten monad
       def join(m)
         bind(m) { |k| k }
+      end
+
+      # concatenate a sequence of binds
+      def pipeline(m, *fs)
+        fs.each { |f| m = bind(m, &f) }; m
+      end
+
+      # evaluate each action in the sequence from left to right, and
+      # collect the results
+      def sequence(*ms)
+        ms.inject(mreturn []) do |m,k|
+          bind(m) { |xs| bind(k) { |x| mreturn xs+[x] } }
+        end
+      end
+
+      # evaluate each action in the sequence from left to right, and
+      # ignore the results
+      def sequence_(*ms)
+        (ms + [mreturn(nil)]).inject { |m,k| bind(m, k) }
       end
     end
 
@@ -63,6 +97,15 @@ module Obfusk
     end
     def join
       self.class.join self
+    end
+    def pipeline(*fs)
+      self.class.pipeline self, *fs
+    end
+    def sequence(*ms)
+      self.class.sequence(self, *ms)
+    end
+    def sequence_(*ms)
+      self.class.sequence_(self, *ms)
     end
   end
 
