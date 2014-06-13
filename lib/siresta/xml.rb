@@ -15,11 +15,11 @@ module Siresta
   module XML
     # parse XML
     #
-    # ```
+    # ```ruby
     # Siresta::XML.parse '<foo><bar id="99">hi!</bar></foo>'
     # # =>  { tag: 'foo', attrs: {}, contents: [
-    #         { tag: 'bar', attrs: { id: 99 }, contents: ['hi!'] }
-    #       ] }
+    # #       { tag: 'bar', attrs: { id: 99 }, contents: ['hi!'] }
+    # #     ] }
     # ```
     def self.parse(xml)
       ox_elem = Ox.parse xml
@@ -37,7 +37,7 @@ module Siresta
 
     # emit XML
     #
-    # ```
+    # ```ruby
     # puts Siresta::XML.emit(
     #   { tag: 'foo', attrs: {}, contents: [
     #     { tag: 'bar', attrs: { id: 99 }, contents: ['hi!'] }
