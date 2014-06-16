@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
+gem 'obfusk', github: 'obfusk/obfusk.rb'
 gem 'pry'
 gem 'puma'
 gem 'rake'
 gem 'sequel'
-gem 'siresta', path: '..'
+gem 'siresta', path: '../..'
 gem 'sqlite3'

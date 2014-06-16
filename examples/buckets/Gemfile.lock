@@ -1,8 +1,15 @@
+GIT
+  remote: git://github.com/obfusk/obfusk.rb.git
+  revision: 14f66ed2af3d751b6628b301e7c34fb7b90989a3
+  specs:
+    obfusk (0.1.1)
+
 PATH
-  remote: ..
+  remote: ../..
   specs:
     siresta (0.0.1)
       excon
+      obfusk
       ox
       sinatra
 
@@ -36,6 +43,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  obfusk!
   pry
   puma
   rake
