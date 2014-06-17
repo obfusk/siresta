@@ -2,7 +2,7 @@
 #
 # File        : siresta/api.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-16
+# Date        : 2014-06-17
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -20,36 +20,47 @@ module Siresta
     end
 
     module ClassMethods
-      def data(k, v)
-        # ...
-      end
-
-      def convert_from(format, handler, &b)
-        # ...
-      end
-
-      def convert_to(format, handler, &b)
-        # ...
-      end
-
-      def handler(name, &b)
-        define_method(name) do |method, path, app|
-          b[Response].runResponse # ...
+      def gen_route(meth, path, formats, pipe, call)
+        send(meth, path) do
+          handle_request meth, path, formats, pipe, &method(call.to_sym)
         end
       end
 
-      def valid_body(name, &b)
-        # ...
+      def handle(name, &b)
+        define_method name, &b
       end
 
-      def valid_params(name, &b)
-        # ...
+      def data(k, v)
+      end
+
+      def to_authorize(handler, &b)
+      end
+
+      def to_convert_from(format, handler, &b)
+      end
+
+      def to_convert_params(handler, &b)
+      end
+
+      def to_convert_to(format, handler, &b)
+      end
+
+      def to_validate_body(handler, &b)
+      end
+
+      def to_validate_params(handler, &b)
       end
     end
 
     # this helper handles requests for generated routes
-    def handle_request(method, path, &b)
-      b[method, path, self]
+    def handle_request(method, path, formats, pipeline, &b)
+      m   = Response
+      fs  = [
+        # ...
+        -> _ { b[m, :TODO_headers, params, request.body.read] }
+        # ...
+      ]
+      m.pipeline(m.return(nil), *fs) # .runResponse ...
     end
   end
 
@@ -59,11 +70,11 @@ module Siresta
     opts_     = opts.dup
     http_dsl  = opts_.delete(:http_dsl) || Sinatra::Base
     api       = Class.new http_dsl
+    api.class_eval { include Siresta::API }
     Spec.walk api_spec(opts_), {
       root: -> (info) {
         api.class_eval do
           enable :sessions if info[:sessions]   # TODO
-          helpers Siresta::API
           set :name   , info[:name]
           set :version, info[:version]
         end
@@ -72,17 +83,9 @@ module Siresta
       resource: -> (info) {
         api.class_eval do
           info[:methods].each do |m|
-            what  = "#{m.upcase} #{info[:path]}".inspect
-            path  = info[:path].inspect
-            code  = info[:specs][m][m] ||
-                      "raise NotImplementedError, #{what}"
-            class_eval %Q{
-              #{m} #{path} do
-                handle_request(#{m.to_sym.inspect}, #{path}) do
-                  #{code}
-                end
-              end
-            }
+            gen_route m.to_sym, info[:path],
+              info[:specs][m][:choices], info[:specs][m]['pipeline'],
+              info[:specs][m][m]
           end
         end
         nil

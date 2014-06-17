@@ -1,5 +1,7 @@
 name:     Chat
 version:  v1
+request_choices:  [json, xml]
+response_choices: [json, xml]
 api:
 - resource: rooms
   contains:
@@ -14,7 +16,7 @@ api:
     - resource: messages
       contains:
       - desc: Stream messages in room
-        get: stream_messages
+        get: stream_messages_in_room
     - resource: post
       contains:
       - desc: Post to room

@@ -2,7 +2,7 @@
 #
 # File        : siresta/spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-13
+# Date        : 2014-06-17
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -19,28 +19,40 @@ module Siresta
 
     # walk spec
     def self.walk(spec, opts)
-      name    = spec['name']
-      version = spec['version']
-      res     = walk_resource spec['api'], '', opts
-      opts[:root][{ res: res, name: name, version: version }]
+      name      = spec['name']
+      version   = spec['version']
+      sessions  = spec['sessions']
+      choices   = { request:  spec['request_choices']   || [],
+                    response: spec['response_choices']  || [] }
+      res       = walk_resource spec['api'], '/', opts, choices
+      opts[:root][{
+        res: res, name: name, version: version, sessions: sessions
+      }]
     end
 
     # process resource when walking spec
-    def self.walk_resource(specs, path, opts)
+    def self.walk_resource(specs, path, opts, choices)
       ms, ss = specs.inject([[],{}]) do |(ms,ss), spec|
+        chs = choices.merge({ request: spec['request_choices'],
+                              response: spec['response_choices'] }
+                            .reject { |k,v| !v })
         (m = (METHODS & spec.keys).first) ?
-          [ms + [m], ss.merge(m => spec)] : [ms,ss]
+          [ms + [m], ss.merge(m => spec.merge(choices: chs))] : [ms,ss]
       end
       opts[:resource][{ methods: ms, specs: ss, path: path }] \
-        .tap { |res| walk_subresources res, specs, path, opts }
+        .tap { |res| walk_subresources res, specs, path, opts, choices }
     end
 
     # process subresources when walking spec
-    def self.walk_subresources(res, specs, path, opts)
+    def self.walk_subresources(res, specs, path, opts, choices)
       specs.each do |spec|
         if (r = spec['resource'])
           r_s = (p = Symbol === r) ? ":#{r}" : r
-          sub = walk_resource spec['contains'], [path,r_s]*'/', opts
+          chs = choices.merge({ request: spec['request_choices'],
+                                response: spec['response_choices'] }
+                              .reject { |k,v| !v })
+          pth = (path == '/' ? '' : path) + '/' + r_s
+          sub = walk_resource spec['contains'], pth, opts, chs
           opts[p ? :parametrized_subresource : :subresource][
             { res: res, sub: sub, parametrized: p, route: r,
               route_s: r_s, path: path }

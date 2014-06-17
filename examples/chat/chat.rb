@@ -10,42 +10,35 @@ module Chat
 
     data :rooms, {}
 
-    valid_params :join_room do |p|
+    to_validate_params :join_room do
       (x = p[:room]) && x =~ /\A[A-Za-z0-9_-]+\z/
     end
 
-    valid_body :join_room do |b|
+    to_validate_body :join_room do
       (x = b['nick']) && x =~ /\A[A-Za-z0-9_-]+\z/
     end
 
-    convert_from :xml, :join_room do
+    to_convert_from :xml, :join_room do
     end
 
-    convert_to :xml, :join_room do
+    to_convert_to :xml, :join_room do
     end
 
-    handler :get_current_rooms do |m|
-      m.data(:rooms) { |rs| m.ok rs.keys } >> m.json_response
+    handle :get_current_rooms do |m|
+      m.data(:rooms) { |rs| m.ok rs.keys }
     end
 
-    handler :join_room do |m|
-      m.validate_params(:join_room) >>
-      m.param(:room) { |r|
-        m.choose_request(m.json_request, m.xml_request(:join_room)) >>
-        m.validate_body(:join_room) >>
-        m.request_body { |b|
-          # TODO: check user exists + add info to room
-          nick  = b['nick']
-          token = SecureRandom.hex 16
-          m.ok token: token
-        } >> m.choose_response(m.json_response, m.xml_response(:join_room))
-      }
+    handle :join_room do |m, headers, params, body|
+      # TODO: check user exists + add info to room
+      nick  = body['nick']
+      token = SecureRandom.hex 16
+      m.ok token: token
     end
 
-    handler :stream_messages do |m|
+    handle :stream_messages_in_room do |m|
     end
 
-    handler :post_to_room do |m|
+    handle :post_to_room do |m|
     end
   end
 end

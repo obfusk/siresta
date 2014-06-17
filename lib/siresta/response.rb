@@ -2,7 +2,7 @@
 #
 # File        : siresta/response.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-16
+# Date        : 2014-06-17
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -12,6 +12,22 @@
 require 'obfusk/adt'
 require 'obfusk/lazy'
 require 'obfusk/monad'
+
+# TODO:
+#
+# (s) -> (a,s)
+#
+# self
+# request: headers, body, params, ...
+# response: status|nil, headers, stream[handle] | body[data] | empty
+# status: done | continue | error[msg]
+#
+# data
+# authorize
+# validate_params
+# validate_body
+# convert_params
+# choose_request, choose_response
 
 module Siresta
   class Response
@@ -61,40 +77,11 @@ module Siresta
 
     # -- helpers --
 
-    def self.data
-    end
-
-    def self.param
-    end
-
-    def self.request_body
-    end
-
-    def self.validate_body
-    end
-
-    def self.validate_params
-    end
+    # ...
 
     # -- formats --
 
-    def self.choose_request
-    end
-
-    def self.choose_response
-    end
-
-    def self.json_request
-    end
-
-    def self.json_response
-    end
-
-    def self.xml_request
-    end
-
-    def self.xml_response
-    end
+    # ...
   end
 end
 
