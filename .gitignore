@@ -5,4 +5,4 @@
 /.yardoc
 /doc
 
-/example/db/*.sqlite3
+*.sqlite3
