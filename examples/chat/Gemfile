@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem 'obfusk', github: 'obfusk/obfusk.rb'
+gem 'pry'
+gem 'rake'
+gem 'siresta', path: '../..'
+gem 'thin'

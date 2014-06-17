@@ -2,23 +2,54 @@
 #
 # File        : siresta/api.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-13
+# Date        : 2014-06-16
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
 #
 # --                                                            ; }}}1
 
+require 'obfusk/atom'
 require 'sinatra/base'
-
 require 'siresta/spec'
 
 module Siresta
   module API
+    def self.included(base)
+      base.extend ClassMethods
+    end
+
+    module ClassMethods
+      def data(k, v)
+        # ...
+      end
+
+      def convert_from(format, handler, &b)
+        # ...
+      end
+
+      def convert_to(format, handler, &b)
+        # ...
+      end
+
+      def handler(name, &b)
+        define_method(name) do |method, path, app|
+          b[Response].runResponse # ...
+        end
+      end
+
+      def valid_body(name, &b)
+        # ...
+      end
+
+      def valid_params(name, &b)
+        # ...
+      end
+    end
+
     # this helper handles requests for generated routes
     def handle_request(method, path, &b)
-      puts "handle_request(#{method}, #{path}) ..."
-      b[]                                                       # TODO
+      b[method, path, self]
     end
   end
 
@@ -31,6 +62,7 @@ module Siresta
     Spec.walk api_spec(opts_), {
       root: -> (info) {
         api.class_eval do
+          enable :sessions if info[:sessions]   # TODO
           helpers Siresta::API
           set :name   , info[:name]
           set :version, info[:version]
@@ -50,7 +82,7 @@ module Siresta
                   #{code}
                 end
               end
-            }                                                   # TODO
+            }
           end
         end
         nil

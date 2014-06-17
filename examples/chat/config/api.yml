@@ -1,0 +1,21 @@
+name:     Chat
+version:  v1
+api:
+- resource: rooms
+  contains:
+  - desc: Get current rooms
+    get: get_current_rooms
+  - resource: :room
+    contains:
+    - resource: join
+      contains:
+      - desc: Join a room
+        post: join_room
+    - resource: messages
+      contains:
+      - desc: Stream messages in room
+        get: stream_messages
+    - resource: post
+      contains:
+      - desc: Post to room
+        post: post_to_room

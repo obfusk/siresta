@@ -1,0 +1,19 @@
+require 'siresta'
+
+env = Siresta.env
+
+desc 'environment'
+task :environment do
+  require './chat'
+end
+
+desc 'pry console'
+task :console => :environment do
+  require 'pry'
+  binding.pry
+end
+
+desc 'API routes'
+task :routes => :environment do
+  puts Siresta.routes.to_yaml
+end
