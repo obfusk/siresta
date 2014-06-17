@@ -2,7 +2,7 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2014-06-13
+    Date        : 2014-06-17
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
     Version     : v0.0.1
@@ -14,7 +14,7 @@
 ## Description
 []: {{{1
 
-  siRESTa - a YAML DSL for declarative REST APIs w/ a pipeline monad
+  siRESTa - a YAML DSL for declarative REST APIs w/ a response monad
 
   siRESTa is a YAML DSL for declarative REST APIs.  It can generate a
   ruby API (w/ sinatra [1]) and Client (w/ excon [2]) for you.
