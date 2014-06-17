@@ -45,7 +45,7 @@ end
 
 desc 'Cleanup'
 task :clean do
-  sh 'rm -rf .yardoc/ doc/ *.gem example/*/db/*.sqlite3'
+  sh 'rm -rf .yardoc/ doc/ *.gem examples/*/db/*.sqlite3'
 end
 
 
