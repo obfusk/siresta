@@ -3,12 +3,12 @@ require File.expand_path('../lib/siresta/version', __FILE__)
 Gem::Specification.new do |s|
   s.name        = 'siresta'
   s.homepage    = 'https://github.com/obfusk/siresta'
-  s.summary     = 'a YAML DSL for declarative REST APIs w/ a pipeline monad'
+  s.summary     = 'siRESTa - declarative REST APIs'
 
   s.description = <<-END.gsub(/^ {4}/, '')
-    siRESTa is a YAML DSL for declarative REST APIs.  It can generate
-    a ruby API (w/ sinatra) and Client (w/ excon) for you.  Processing
-    request is done using a pipeline monad.
+    siRESTa is a DSL for declarative REST APIs.  It can generate a
+    ruby API (w/ sinatra) and Client (w/ excon) for you, based on a
+    YAML file.  Processing requests is done using a monad.
   END
 
   s.version     = Siresta::VERSION

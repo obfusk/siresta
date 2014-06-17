@@ -14,11 +14,11 @@
 ## Description
 []: {{{1
 
-  siRESTa - a YAML DSL for declarative REST APIs w/ a response monad
+  siRESTa - declarative REST APIs
 
-  siRESTa is a YAML DSL for declarative REST APIs.  It can generate a
-  ruby API (w/ sinatra [1]) and Client (w/ excon [2]) for you.
-  Processing request is done using a pipeline monad.
+  siRESTa is a DSL for declarative REST APIs.  It can generate a ruby
+  API (w/ sinatra [1]) and Client (w/ excon [2]) for you, based on a
+  YAML file.  Processing requests is done using a monad.
 
   More documentation is underway.  For now, see `example/` and
   `features/`.
