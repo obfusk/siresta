@@ -6,7 +6,7 @@ api:
 - resource: rooms
   contains:
   - desc: Get current rooms
-    get: get_current_rooms
+    get:  get_current_rooms
   - resource: :room
     contains:
     - resource: join
@@ -16,7 +16,7 @@ api:
     - resource: messages
       contains:
       - desc: Stream messages in room
-        get: stream_messages_in_room
+        get:  stream_messages_in_room
     - resource: post
       contains:
       - desc: Post to room

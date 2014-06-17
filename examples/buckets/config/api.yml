@@ -1,40 +1,37 @@
 name:     Buckets
 version:  v1
+request_choices:  [json, xml]
+response_choices: [json, xml]
 api:
 - resource: buckets
   contains:
   - desc: List buckets
-    get:
-    # Bucket.all
+    get:  list_buckets
   - desc: Create a bucket
-    post:
-    # Bucket.create
+    post: create_bucket
   - resource: :bucket_id
     contains:
-    - desc: Read a bucket
-      get:
-      # Bucket[params[:bucket_id]]
-    - desc: Update a bucket
-      put:
-      # Bucket[params[:bucket_id]].set('TODO')
-    - desc: Delete a bucket
-      delete:
-      # Bucket.where(id: params[bucket_id]).delete
+    - desc:   Read a bucket
+      get:    get_bucket
+    - desc:   Update a bucket
+      put:    update_bucket
+    - desc:   Delete a bucket
+      delete: delete_bucket
     - resource: objects
       contains:
-      - get:
-      - post:
+      - get:  list_bucket_objects
+      - post: create_bucket_object
       - resource: :object_id
         contains:
-        - get:
-        - put:
-        - delete:
+        - get:    get_bucket_object
+        - put:    update_bucket_object
+        - delete: delete_bucket_object
 - resource: users
   contains:
-  - get:
-  - post:
+  - get:  list_users
+  - post: create_user
   - resource: :user_id
     contains:
-    - get:
-    - put:
-    - delete:
+    - get:    get_user
+    - put:    update_user
+    - delete: delete_user
