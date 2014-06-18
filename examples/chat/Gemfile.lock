@@ -1,15 +1,15 @@
 GIT
   remote: git://github.com/obfusk/obfusk.rb.git
-  revision: 9c5f4d876573075bc8a9f755f1e9b556c8d2e863
+  revision: 92297b19503c715505efa1d7377b50c12aac9ec5
   specs:
-    obfusk (0.1.1)
+    obfusk (0.1.3)
 
 PATH
   remote: ../..
   specs:
-    siresta (0.0.1)
+    siresta (0.0.2)
       excon
-      obfusk (>= 0.1.1)
+      obfusk (>= 0.1.3)
       ox
       sinatra
 

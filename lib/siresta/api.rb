@@ -2,7 +2,7 @@
 #
 # File        : siresta/api.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-17
+# Date        : 2014-06-18
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -84,7 +84,7 @@ module Siresta
     end
 
     # atoms
-    def data
+    def siresta_data
       settings.siresta[:data]
     end
 

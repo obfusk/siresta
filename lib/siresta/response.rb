@@ -2,7 +2,7 @@
 #
 # File        : siresta/response.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-17
+# Date        : 2014-06-18
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -119,12 +119,20 @@ module Siresta
 
     # get atom data
     def self.get_data(k, &b)
-      x = get >> -> s { mreturn s.api_obj.data[k]._ }; b ? x >> b : x
+      x = get >> -> s { mreturn s.api_obj.siresta_data[k]._ }; b ? x >> b : x
+    end
+
+    # modify atom data
+    def self.modify_data(k, &b)
+      modify -> (s;m,x) {
+        s.api_obj.siresta_data[k].swap! { |v| m = b[v]; x = m.run[s]; x.value }
+        x.state
+      }
     end
 
     # set atom data
     def self.set_data(k, v)
-      get >> -> s { s.api_obj.data[k].swap! { |_| v }; mreturn nil }
+      get >> -> s { s.api_obj.siresta_data[k].swap! { |_| v }; mreturn nil }
     end
 
     # authorization

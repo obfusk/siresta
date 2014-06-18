@@ -1,3 +1,4 @@
+require 'obfusk/data'
 require 'securerandom'
 require 'siresta'
 
@@ -24,28 +25,28 @@ module Chat
     # to_convert_to :xml, :join_room do
     # end
 
+    def log_rooms(m)
+      m.get_data(:rooms) { |rooms| puts "rooms: #{rooms}"; m.return nil }
+    end
+
     handle :get_current_rooms do |m, h, p, b|
-      m.get_data(:rooms) { |rooms| m.ok rooms.keys }
+      log_rooms(m) >> m.get_data(:rooms) { |rooms| m.ok rooms.keys }
     end
 
     handle :join_room do |m, h, params, body|
-      m.get_data(:rooms) do |rooms|
-        nick      = body['nick']
-        room_name = params[:room]
-        room      = rooms[room_name] || {}
-        users     = room[:users]     || {}
-        tokens    = room[:tokens]    || {}
-        if users[nick]
-          m.error "nick '#{nick}' is taken"
+      log_rooms(m) >> m.modify_data(:rooms) do |rooms|
+        nick = body['nick']; room_name = params[:room]
+        if Obfusk.get_in rooms, room_name, :users, nick
+          m.error("nick '#{nick}' is taken") >> m.return(rooms)
         else
           token   = SecureRandom.hex 16
-          users_  = users.merge   nick => token
-          tokens_ = tokens.merge  token => nick
-          room_   = room.merge users: users_, tokens: tokens_
-          rooms_  = rooms.merge room_name => room_
-          m.set_data(:rooms, rooms_) >> m.ok(token: token, nick: nick)
+          rooms_1 = Obfusk.modify_in(rooms, room_name, :users) \
+                      { |x| x.merge nick => token }
+          rooms_2 = Obfusk.modify_in(rooms_1, room_name, :tokens) \
+                      { |x| x.merge token => nick }
+          m.ok(token: token, nick: nick) >> m.return(rooms_2)
         end
-      end
+      end >> log_rooms(m)
     end
 
     handle :stream_messages_in_room do |m, h, p, b|

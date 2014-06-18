@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'excon'
 # s.add_runtime_dependency 'hashie'
-  s.add_runtime_dependency 'obfusk', '>= 0.1.1'
+  s.add_runtime_dependency 'obfusk', '>= 0.1.3'
   s.add_runtime_dependency 'ox'
   s.add_runtime_dependency 'sinatra'
 
