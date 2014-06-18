@@ -1,4 +1,4 @@
 module Siresta
-  VERSION = '0.0.1'
-  DATE    = '2014-06-13'
+  VERSION = '0.0.2'
+  DATE    = '2014-06-18'
 end
