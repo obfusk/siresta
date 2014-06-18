@@ -1,7 +1,7 @@
 name:     Chat
 version:  v1
-request_choices:  [json, xml]
-response_choices: [json, xml]
+request_formats:  [json] # , xml]
+response_formats: [json] # , xml]
 api:
 - resource: rooms
   contains:

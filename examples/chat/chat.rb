@@ -18,27 +18,40 @@ module Chat
       (x = b['nick']) && x =~ /\A[A-Za-z0-9_-]+\z/
     end
 
-    to_convert_from :xml, :join_room do
+    # to_convert_from :xml, :join_room do
+    # end
+
+    # to_convert_to :xml, :join_room do
+    # end
+
+    handle :get_current_rooms do |m, h, p, b|
+      m.get_data(:rooms) { |rooms| m.ok rooms.keys }
     end
 
-    to_convert_to :xml, :join_room do
+    handle :join_room do |m, h, params, body|
+      m.get_data(:rooms) do |rooms|
+        nick      = body['nick']
+        room_name = params[:room]
+        room      = rooms[room_name] || {}
+        users     = room[:users]     || {}
+        tokens    = room[:tokens]    || {}
+        if users[nick]
+          m.error "nick '#{nick}' is taken"
+        else
+          token   = SecureRandom.hex 16
+          users_  = users.merge   nick => token
+          tokens_ = tokens.merge  token => nick
+          room_   = room.merge users: users_, tokens: tokens_
+          rooms_  = rooms.merge room_name => room_
+          m.set_data(:rooms, rooms_) >> m.ok(token: token, nick: nick)
+        end
+      end
     end
 
-    handle :get_current_rooms do |m|
-      m.data(:rooms) { |rs| m.ok rs.keys }
+    handle :stream_messages_in_room do |m, h, p, b|
     end
 
-    handle :join_room do |m, headers, params, body|
-      # TODO: check user exists + add info to room
-      nick  = body['nick']
-      token = SecureRandom.hex 16
-      m.ok token: token
-    end
-
-    handle :stream_messages_in_room do |m|
-    end
-
-    handle :post_to_room do |m|
+    handle :post_to_room do |m, h, p, b|
     end
   end
 end

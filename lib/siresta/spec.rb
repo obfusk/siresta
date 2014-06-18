@@ -22,34 +22,34 @@ module Siresta
       name      = spec['name']
       version   = spec['version']
       sessions  = spec['sessions']
-      choices   = { request:  spec['request_choices']   || [],
-                    response: spec['response_choices']  || [] }
-      res       = walk_resource spec['api'], '/', opts, choices
+      formats   = { request:  spec['request_formats']   || [],
+                    response: spec['response_formats']  || [] }
+      res       = walk_resource spec['api'], '/', opts, formats
       opts[:root][{
         res: res, name: name, version: version, sessions: sessions
       }]
     end
 
     # process resource when walking spec
-    def self.walk_resource(specs, path, opts, choices)
+    def self.walk_resource(specs, path, opts, formats)
       ms, ss = specs.inject([[],{}]) do |(ms,ss), spec|
-        chs = choices.merge({ request: spec['request_choices'],
-                              response: spec['response_choices'] }
+        chs = formats.merge({ request: spec['request_formats'],
+                              response: spec['response_formats'] }
                             .reject { |k,v| !v })
         (m = (METHODS & spec.keys).first) ?
-          [ms + [m], ss.merge(m => spec.merge(choices: chs))] : [ms,ss]
+          [ms + [m], ss.merge(m => spec.merge(formats: chs))] : [ms,ss]
       end
       opts[:resource][{ methods: ms, specs: ss, path: path }] \
-        .tap { |res| walk_subresources res, specs, path, opts, choices }
+        .tap { |res| walk_subresources res, specs, path, opts, formats }
     end
 
     # process subresources when walking spec
-    def self.walk_subresources(res, specs, path, opts, choices)
+    def self.walk_subresources(res, specs, path, opts, formats)
       specs.each do |spec|
         if (r = spec['resource'])
           r_s = (p = Symbol === r) ? ":#{r}" : r
-          chs = choices.merge({ request: spec['request_choices'],
-                                response: spec['response_choices'] }
+          chs = formats.merge({ request: spec['request_formats'],
+                                response: spec['response_formats'] }
                               .reject { |k,v| !v })
           pth = (path == '/' ? '' : path) + '/' + r_s
           sub = walk_resource spec['contains'], pth, opts, chs

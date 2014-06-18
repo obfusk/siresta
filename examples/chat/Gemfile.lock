@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/obfusk/obfusk.rb.git
-  revision: 465ea7ea7c0438e7af661d91728fa162336247a1
+  revision: 9c5f4d876573075bc8a9f755f1e9b556c8d2e863
   specs:
     obfusk (0.1.1)
 

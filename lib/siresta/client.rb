@@ -2,7 +2,7 @@
 #
 # File        : siresta/client.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-13
+# Date        : 2014-06-17
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -10,7 +10,6 @@
 # --                                                            ; }}}1
 
 require 'excon'
-
 require 'siresta/spec'
 
 module Siresta

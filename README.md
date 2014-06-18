@@ -33,31 +33,42 @@
   ```yaml
   name:     FooBarBaz
   version:  v1
+  request_formats:  [json, xml]
+  response_formats: [json, xml]
   api:
   - resource: foos
     contains:
     - desc: Gets foos
-      get:
-    - post:
+      get:  get_foos
+    - post: create_foo
     - resource: :foo_id
       contains:
-      - desc: Get a foo
-        get:
-      - put:
-      - delete:
+      - desc:   Get a foo
+        get:    get_foo
+      - put:    create_foo
+      - delete: delete_foo
       - resource: bars
         contains:
-        - get:
+        - get: get_bars
         # ...
   - resource: baz
     contains:
-    - get:
+    - get: get_baz
     # ...
   ```
 
   ```ruby
   require 'siresta'
   API = Siresta.api file: 'config/api.yml'
+  class API
+    data :foos, []
+
+    handle :get_foos do |m, h, p, b|
+      m.get_data(:foos) { |foos| m.ok foos }
+    end
+
+    # ...
+  end
   API.run!
   ```
 
@@ -109,13 +120,11 @@ $ rake docs
 
 ## TODO
 
-  * pipeline
+  * finish monad, api
   * specs
   * docs
-  * params
-  * formats
-  * authorization
-  * authentication
+  * authorization?
+  * authentication?
 
 ## License
 
