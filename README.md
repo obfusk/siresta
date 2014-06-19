@@ -2,7 +2,7 @@
 
     File        : README.md
     Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-    Date        : 2014-06-18
+    Date        : 2014-06-19
 
     Copyright   : Copyright (C) 2014  Felix C. Stegerman
     Version     : v0.0.2
@@ -63,8 +63,9 @@
   class API
     data :foos, []
 
-    handle :get_foos do |m, h, p, b|
+    handle :get_foos do |m, headers, params, body|
       m.get_data(:foos) { |foos| m.ok foos }
+      # m is the Response monad
     end
 
     # ...
