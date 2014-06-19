@@ -11,18 +11,18 @@ module Chat
 
     data :rooms, {}
 
-    to_validate_params :join_room do
-      (x = p[:room]) && x =~ /\A[A-Za-z0-9_-]+\z/
-    end
-
-    to_validate_body :join_room do
-      (x = b['nick']) && x =~ /\A[A-Za-z0-9_-]+\z/
-    end
-
-    # to_convert_from :xml, :join_room do
+    # to_validate_params :join_room do |p|
+    #   (x = p[:room]) && x =~ /\A[A-Za-z0-9_-]+\z/
     # end
 
-    # to_convert_to :xml, :join_room do
+    # to_validate_body :join_room do |b|
+    #   (x = b['nick']) && x =~ /\A[A-Za-z0-9_-]+\z/
+    # end
+
+    # to_convert_from :xml, :join_room do |b|
+    # end
+
+    # to_convert_to :xml, :join_room do |b|
     # end
 
     def log_rooms(m)
@@ -50,9 +50,13 @@ module Chat
     end
 
     handle :stream_messages_in_room do |m, h, p, b|
+      require 'pry'; binding.pry  # TODO
+      m.ok nil
     end
 
     handle :post_to_room do |m, h, p, b|
+      require 'pry'; binding.pry  # TODO
+      m.ok nil
     end
   end
 end

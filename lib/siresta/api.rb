@@ -2,7 +2,7 @@
 #
 # File        : siresta/api.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-18
+# Date        : 2014-06-19
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -11,6 +11,7 @@
 
 require 'json'
 require 'obfusk/atom'
+require 'obfusk/data'
 require 'sinatra/base'
 require 'siresta/response'
 require 'siresta/spec'
@@ -18,7 +19,7 @@ require 'siresta/spec'
 module Siresta
   module API
     # handle request for generated route
-    def _handle_request(meth, path, formats, pipe, handler)
+    def _siresta_handle_request(meth, path, formats, pipe, handler)
       b   = method handler
       r   = Response
       fs  = []  # TODO
@@ -31,7 +32,7 @@ module Siresta
         unless formats[:response].empty?
 
       x   = r.pipeline(r.return(nil), *fs)
-      s   = x.exec _begin_state
+      s   = x.exec _siresta_begin_state
 
       # TODO
       if s.status.is_a? r::ResponseError
@@ -44,13 +45,10 @@ module Siresta
     end
 
     # begin state for Response monad
-    def _begin_state
+    def _siresta_begin_state
       r = Response
       r.ResponseState(
-        r.RequestData(
-          {}, # TODO: headers
-          request.body.read, params
-        ),
+        r.RequestData(request_headers, request.body.read, params),
         r.ResponseInfo(nil, {}, r.ResponseEmpty()),
         r.ResponseContinue(), self
       )
@@ -93,10 +91,27 @@ module Siresta
     end
 
     module ClassMethods
+      # add default converters
+      def _siresta_add_default_converters
+        to_convert_from :json do |body|
+          body.empty? ? nil : JSON.parse(body)
+        end
+
+        to_convert_to :json do |data|
+          data.to_json
+        end
+      end
+
+      # default settings
+      def _siresta_default_settings
+        { data: {}, authorize: {}, convert_from: {}, convert_params: {},
+          convert_to: {}, validate_body: {}, validate_params: {} }
+      end
+
       # generate route
-      def _gen_route(meth, path, formats, pipe, handler)
+      def _siresta_gen_route(meth, path, formats, pipe, handler)
         send(meth, path) do
-          _handle_request meth, path, formats, pipe, handler
+          _siresta_handle_request meth, path, formats, pipe, handler
         end
       end
 
@@ -142,20 +157,22 @@ module Siresta
     end
   end
 
+  module SinatraHelpers
+    # request headers (from env) w/ symbolic access
+    def request_headers
+      headers = env.inject({}) do |h,(k,v)|
+        h[($1||$2).downcase] = v \
+          if k =~ /^http_(.*)|^(content_(type|length))$/i
+        h
+      end
+      Obfusk.symbolic_hash headers
+    end
+  end
+
   class ApiBase < Sinatra::Base
-    include Siresta::API
-
-    set :siresta, { data: {}, authorize: {}, convert_from: {},
-                    convert_params: {}, convert_to: {},
-                    validate_body: {}, validate_params: {} }
-
-    to_convert_from :json do |body|
-      body.empty? ? nil : JSON.parse(body)
-    end
-
-    to_convert_to :json do |data|
-      data.to_json
-    end
+    include API, SinatraHelpers
+    set :siresta, _siresta_default_settings
+    _siresta_add_default_converters
   end
 
   # generate an API (Sinatra::Base subclass) based on a YAML
@@ -176,7 +193,7 @@ module Siresta
           info[:methods].each do |m|
             formats = info[:specs][m][:formats]
             symfmts = Hash[formats.map { |k,v| [k,v.map(&:to_sym)] }]
-            _gen_route m.to_sym, info[:path], symfmts,
+            _siresta_gen_route m.to_sym, info[:path], symfmts,
               info[:specs][m]['pipeline'], info[:specs][m][m].to_sym
           end
         end
