@@ -2,7 +2,7 @@
 #
 # File        : siresta/spec.rb
 # Maintainer  : Felix C. Stegerman <flx@obfusk.net>
-# Date        : 2014-06-17
+# Date        : 2014-06-19
 #
 # Copyright   : Copyright (C) 2014  Felix C. Stegerman
 # Licence     : LGPLv3+
@@ -16,6 +16,8 @@ module Siresta
 
   module Spec
     METHODS = %w{ post get put delete }
+
+    class RouteConflictError < RuntimeError; end
 
     # walk spec
     def self.walk(spec, opts)
@@ -40,18 +42,21 @@ module Siresta
           [ms + [m], ss.merge(m => spec.merge(formats: chs))] : [ms,ss]
       end
       opts[:resource][{ methods: ms, specs: ss, path: path }] \
-        .tap { |res| walk_subresources res, specs, path, opts, formats }
+        .tap { |res| walk_subresources res, specs, path, opts, formats, ms }
     end
 
     # process subresources when walking spec
-    def self.walk_subresources(res, specs, path, opts, formats)
+    def self.walk_subresources(res, specs, path, opts, formats, methods)
       specs.each do |spec|
         if (r = spec['resource'])
           r_s = (p = Symbol === r) ? ":#{r}" : r
+          pth = (path == '/' ? '' : path) + '/' + r_s
+          raise RouteConflictError,
+            "route #{pth} conflicts with a method supported by its parent" \
+              if !p && methods.include?(r.to_s)
           chs = formats.merge({ request: spec['request_formats'],
                                 response: spec['response_formats'] }
                               .reject { |k,v| !v })
-          pth = (path == '/' ? '' : path) + '/' + r_s
           sub = walk_resource spec['contains'], pth, opts, chs
           opts[p ? :parametrized_subresource : :subresource][
             { res: res, sub: sub, parametrized: p, route: r,

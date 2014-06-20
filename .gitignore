@@ -4,5 +4,6 @@
 /*.gem
 /.yardoc
 /doc
+/examples/*/html/*.js
 
 *.sqlite3

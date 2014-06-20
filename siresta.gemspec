@@ -20,16 +20,17 @@ Gem::Specification.new do |s|
   s.licenses    = %w{ LGPLv3+ }
 
   s.files       = %w{ .yardopts README.md Rakefile siresta.gemspec } \
-                + Dir['lib/**/*.rb']
+                + Dir['lib/**/*.{rb,erb}']
 
   s.add_runtime_dependency 'excon'
-# s.add_runtime_dependency 'hashie'
   s.add_runtime_dependency 'obfusk', '>= 0.1.3'
   s.add_runtime_dependency 'ox'
   s.add_runtime_dependency 'sinatra'
 
   s.add_development_dependency 'cucumber'
   s.add_development_dependency 'rake'
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'simplecov', '~> 0.7'  # TODO
   s.add_development_dependency 'yard'
 
   s.required_ruby_version = '>= 1.9.1'

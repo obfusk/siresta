@@ -9,7 +9,7 @@
 
 []: }}}1
 
-[![Gem Version](https://badge.fury.io/rb/siresta.png)](https://badge.fury.io/rb/siresta)
+[![Gem Version](https://badge.fury.io/rb/siresta.png)](https://rubygems.org/gems/siresta)
 
 ## Description
 []: {{{1
@@ -28,6 +28,7 @@
 []: }}}1
 
 ## Examples
+
 []: {{{1
 
   ```yaml
@@ -57,6 +58,10 @@
     # ...
   ```
 
+[]: }}}1
+
+[]: {{{1
+
   ```ruby
   require 'siresta'
   API = Siresta.api file: 'config/api.yml'
@@ -73,6 +78,10 @@
   API.run!
   ```
 
+[]: }}}1
+
+[]: {{{1
+
   ```
   GET     /foos
   POST    /foos
@@ -83,6 +92,10 @@
   GET     /baz
   ...
   ```
+
+[]: }}}1
+
+[]: {{{1
 
   ```ruby
   require 'siresta'
@@ -97,6 +110,32 @@
   c.foos[some_foo_id].bars.get
   c.baz.get
   ```
+
+[]: }}}1
+
+[]: {{{1
+
+  ```ruby
+  # generate javascript client
+  require 'siresta/clients/js'
+  File.write 'foobarbaz.js', Siresta::Clients.js('FooBarBazClient')
+  ```
+
+  ```javascript
+  # use javascript client
+  var c = FooBarBazClient('http://localhost:4567');
+  c.foos.get().done(function() { alert('success'); });
+  c.foos.post({ headers: { 'Content-Type': 'foo/bar' } });
+  c.foos[some_foo_id].get({ data: { foo: 'bar' } });
+  c.foos[some_foo_id].put();
+  c.foos[some_foo_id].delete();
+  c.foos[some_foo_id].bars.get();
+  c.baz.get();
+  ```
+
+[]: }}}1
+
+[]: {{{1
 
   ```ruby
   require 'siresta'
@@ -116,16 +155,17 @@
 
 ```bash
 $ rake cuke
+$ rake spec
 $ rake docs
 ```
 
 ## TODO
 
+  * features, specs, docs
   * finish monad, api
-  * specs
-  * docs
   * authorization?
   * authentication?
+  * ...
 
 ## License
 

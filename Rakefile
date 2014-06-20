@@ -26,9 +26,41 @@ task 'cuke:steps' do
 end
 
 
+desc 'Run specs'
+task :spec do
+  sh 'rspec -c'
+end
+
+desc 'Run specs verbosely'
+task 'spec:verbose' do
+  sh 'rspec -cfd'
+end
+
+desc 'Run specs verbosely, view w/ less'
+task 'spec:less' do
+  sh 'rspec -cfd --tty | less -R'
+end
+
+desc 'Run specs w/ coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'yes'; Rake::Task['spec'].execute
+end
+
+
 desc 'Check for warnings'
 task :warn do
   sh 'ruby -w -I lib -r siresta -e ""'  # TODO
+end
+
+desc 'Check for warnings in specs'
+task 'warn:spec' do
+  reqs = Dir['spec/**/*.rb'].sort.map { |x| "-r ./#{x}" } * ' '
+  sh "ruby -w -I lib -r rspec #{reqs} -e ''"
+end
+
+desc 'Check for warnings in specs (but not void context)'
+task 'warn:spec:novoid' do
+  sh 'rake warn:spec 2>&1 | grep -v "void context"'
 end
 
 
@@ -45,7 +77,7 @@ end
 
 desc 'Cleanup'
 task :clean do
-  sh 'rm -rf .yardoc/ doc/ *.gem examples/*/db/*.sqlite3'
+  sh 'rm -rf .yardoc/ doc/ examples/*/html/*.js *.gem examples/*/db/*.sqlite3'
 end
 
 

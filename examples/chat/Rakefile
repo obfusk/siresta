@@ -13,6 +13,12 @@ task :console => :environment do
   binding.pry
 end
 
+desc 'JS client'
+task :js do
+  require 'siresta/clients/js'
+  File.write 'html/chat.js', Siresta::Clients.js('ChatClient')
+end
+
 desc 'API routes'
 task :routes => :environment do
   puts Siresta.routes.to_yaml

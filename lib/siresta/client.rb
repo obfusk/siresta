@@ -14,9 +14,10 @@ require 'siresta/spec'
 
 module Siresta
   module Client
-    # (sub)resource: wraps url, gets extendes as-needed w/ `.post`,
+    # (sub)resource: wraps url, gets extended as-needed w/ `.post`,
     # `.get`, `.put`, `.delete`, `.some_resource`, `[some_param]` etc.
-    # Route methods take the same arguments as Excon's.
+    # Route methods take the same arguments as Excon's (after the
+    # url).
     class Resource
       attr_reader :url
       def initialize(url, *path)

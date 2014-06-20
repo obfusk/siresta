@@ -1,0 +1,58 @@
+(function() {
+  <%
+  methods_  = methods.map(&:to_json)
+  routes_   = routes.map { |r| [r[:route].to_json,r[:sub]] }
+  %>
+
+  var methods   = [];
+  var routes    = [];
+  var resources = [];
+
+  <% if r = w_param %>
+  var call = <%= r[:sub].to_js %>
+  <% else %>
+  var call = null;
+  <% end %>
+
+  var builder = function(url, $) {
+    if (url == null) { throw Error('expected argument: url'); }
+    if ($ == null) { $ = this.$; }
+
+    <% if w_param %>
+    <%# resource(some_param) %>
+    var resource = function(param) {
+      if (param == null) { throw Error('expected argument: param'); }
+      return call(url + '/' + param, $);
+    };
+    <% else %>
+    var resource = {};
+    <% end %>
+
+    <% methods_.each do |m| %>
+    <%# resource.{get,post,put,delete}() %>
+    resource[<%= m %>] = methods[<%= m %>](url, $);
+    <% end %>
+
+    <% routes_.each do |(r,s)| %>
+    <%# resource.some_route %>
+    resource[<%= r %>] = resources[<%= r %>](url + '/' + <%= r %>, $);
+    <% end %>
+
+    return resource;
+  };
+
+  <% methods_.each do |m| %>
+  methods[<%= m %>] = function(url, $) {
+    return function(settings) {
+      if (settings == null) { settings = {}; }
+      return $.ajax($.extend({ url: url, type: <%= m %> }, settings));
+    };
+  };
+  <% end %>
+
+  <% routes_.each do |(r,s)| %>
+  resources[<%= r %>] = <%= s.to_js %>
+  <% end %>
+
+  return builder;
+})();
