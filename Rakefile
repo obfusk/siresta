@@ -41,9 +41,11 @@ task 'spec:less' do
   sh 'rspec -cfd --tty | less -R'
 end
 
-desc 'Run specs w/ coverage'
+desc 'Run cucumber & specs w/ coverage'
 task :coverage do
-  ENV['COVERAGE'] = 'yes'; Rake::Task['spec'].execute
+  ENV['COVERAGE'] = 'yes'
+  Rake::Task['cuke'].execute
+  Rake::Task['spec'].execute
 end
 
 

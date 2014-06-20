@@ -29,6 +29,17 @@ module Chat
       m.get_data(:rooms) { |rooms| puts "rooms: #{rooms}"; m.return nil }
     end
 
+    # could be improved
+    before do
+      headers['Access-Control-Allow-Origin']  = '*'
+      headers['Access-Control-Allow-Headers'] = 'accept, content-type'
+    end
+
+    # could be improved
+    options '/*' do
+      200
+    end
+
     handle :get_current_rooms do |m, h, p, b|
       log_rooms(m) >> m.get_data(:rooms) { |rooms| m.ok rooms.keys }
     end
