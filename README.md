@@ -16,12 +16,15 @@
 
   siRESTa - declarative REST APIs
 
-  siRESTa is a DSL for declarative REST APIs.  It can generate a ruby
-  API (w/ sinatra [1]) and Client (w/ excon [2]) for you, based on a
-  YAML file.  Processing requests is done using a monad.
+  siRESTa is a DSL for declarative REST APIs.  After you describe your
+  API in a YAML file, it can generate a ruby API (w/
+  [sinatra](http://www.sinatrarb.com)), ruby client (w/
+  [excon](https://github.com/excon/excon)), and javascript client (w/
+  jQuery) for you.  Processing requests is done using a monad.
 
-  More documentation is underway.  For now, see `example/` and
-  `features/`.
+  More documentation is underway.  For now, see `examples/`.
+
+<!-- `features/` and `specs/` -->
 
   ...
 
@@ -169,17 +172,11 @@ $ rake docs
 
 ## License
 
-  LGPLv3+ [3].
+  LGPLv3+ [1].
 
 ## References
 
-  [1] Sinatra
-  --- http://www.sinatrarb.com
-
-  [2] Excon
-  --- https://github.com/excon/excon
-
-  [3] GNU Lesser General Public License, version 3
+  [1] GNU Lesser General Public License, version 3
   --- http://www.gnu.org/licenses/lgpl-3.0.html
 
 []: ! ( vim: set tw=70 sw=2 sts=2 et fdm=marker : )
