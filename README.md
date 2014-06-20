@@ -130,7 +130,7 @@
   ```
 
   ```javascript
-  # javascript client
+  // javascript client
   var c = FooBarBazClient('http://localhost:4567');
   c.foos.get().done(function() { alert('success'); });
   c.foos.post({ headers: { 'Content-Type': 'foo/bar' } });
