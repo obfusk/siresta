@@ -100,17 +100,6 @@
   #     ["GET",     "/baz",               nil         ]]
   ```
 
-  ```
-  GET     /foos
-  POST    /foos
-  GET     /foos/:foo_id
-  PUT     /foos/:foo_id
-  DELETE  /foos/:foo_id
-  GET     /foos/:foo_id/bars
-  GET     /baz
-  ...
-  ```
-
 []: }}}1
 
 []: {{{1
