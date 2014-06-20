@@ -32,6 +32,7 @@
 []: {{{1
 
   ```yaml
+  # yaml description
   name:     FooBarBaz
   version:  v1
   request_formats:  [json, xml]
@@ -63,6 +64,7 @@
 []: {{{1
 
   ```ruby
+  # ruby api
   require 'siresta'
   API = Siresta.api file: 'config/api.yml'
   class API
@@ -82,6 +84,19 @@
 
 []: {{{1
 
+  ```ruby
+  # routes
+  require 'siresta'
+  Siresta.routes
+  # => [["GET",     "/foos",              "Gets foos" ],
+  #     ["POST",    "/foos",              nil         ],
+  #     ["GET",     "/foos/:foo_id",      "Get a foo" ],
+  #     ["PUT",     "/foos/:foo_id",      nil         ],
+  #     ["DELETE",  "/foos/:foo_id",      nil         ],
+  #     ["GET",     "/foos/:foo_id/bars", nil         ],
+  #     ["GET",     "/baz",               nil         ]]
+  ```
+
   ```
   GET     /foos
   POST    /foos
@@ -98,6 +113,7 @@
 []: {{{1
 
   ```ruby
+  # ruby client
   require 'siresta'
   Client = Siresta.client
   c = Client.new 'http://localhost:4567'
@@ -122,7 +138,7 @@
   ```
 
   ```javascript
-  # use javascript client
+  # javascript client
   var c = FooBarBazClient('http://localhost:4567');
   c.foos.get().done(function() { alert('success'); });
   c.foos.post({ headers: { 'Content-Type': 'foo/bar' } });
@@ -131,22 +147,6 @@
   c.foos[some_foo_id].delete();
   c.foos[some_foo_id].bars.get();
   c.baz.get();
-  ```
-
-[]: }}}1
-
-[]: {{{1
-
-  ```ruby
-  require 'siresta'
-  Siresta.routes
-  # => [["GET",     "/foos",              "Gets foos" ],
-  #     ["POST",    "/foos",              nil         ],
-  #     ["GET",     "/foos/:foo_id",      "Get a foo" ],
-  #     ["PUT",     "/foos/:foo_id",      nil         ],
-  #     ["DELETE",  "/foos/:foo_id",      nil         ],
-  #     ["GET",     "/foos/:foo_id/bars", nil         ],
-  #     ["GET",     "/baz",               nil         ]]
   ```
 
 []: }}}1
